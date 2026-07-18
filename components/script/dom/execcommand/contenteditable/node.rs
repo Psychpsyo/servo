@@ -1700,14 +1700,8 @@ impl Node {
                     context_object.default_single_line_container_name().str(),
                 );
             // Step 2.5. Fix disallowed ancestors of node.
-            //
-            // NOTE: We should only do this if we actually changed node. If node didn't change
-            // (for example it was already the correct tag), then we would infinitely recurse
-            // here. Therefore, we should check if we changed the node and only then do it
-            // again.
-            if *node != *self {
-                node.fix_disallowed_ancestors(cx, context_object);
-            }
+            node.fix_disallowed_ancestors(cx, context_object);
+
             // Step 2.6. Let children be node's children.
             let children = node.children().collect::<Vec<DomRoot<Node>>>();
             // Step 2.7. For each child in children, if child is a prohibited paragraph child:
