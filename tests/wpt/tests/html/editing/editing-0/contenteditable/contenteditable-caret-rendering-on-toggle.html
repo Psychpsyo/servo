@@ -1,0 +1,10 @@
+<!doctype html>
+<title>When an element becomes contenteditable, the editing caret starts showing up</title>
+<link rel="author" title="Psychpsyo" href="mailto:psychpsyo@gmail.com">
+<link rel="match" href="contenteditable-caret-rendering-on-toggle-ref.html">
+<div id="div" contenteditable>Hello</div>
+<script>
+  div.focus();
+  document.getSelection().setPosition(div);
+  div.removeAttribute("contenteditable");
+</script>

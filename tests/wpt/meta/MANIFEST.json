@@ -413744,6 +413744,19 @@
     "editing": {
      "editing-0": {
       "contenteditable": {
+       "contenteditable-caret-rendering-on-toggle.html": [
+        "0d1a713f3f5231b7d07b3907b0f298efca2a01d6",
+        [
+         null,
+         [
+          [
+           "/html/editing/editing-0/contenteditable/contenteditable-caret-rendering-on-toggle-ref.html",
+           "=="
+          ]
+         ],
+         {}
+        ]
+       ],
        "contenteditable-overflow-height.html": [
         "8470b02c2b9d53e6bfe2d537389fa79c9d6577bf",
         [
@@ -570012,6 +570025,10 @@
       "contenteditable": {
        "WEB_FEATURES.yml": [
         "ba84c7e3131b6a6909f03a6edb01f90c4552fef6",
+        []
+       ],
+       "contenteditable-caret-rendering-on-toggle-ref.html": [
+        "48a4d5536f59f4a0dbaacbd5b4c750b33b704ad7",
         []
        ],
        "contenteditable-overflow-height-ref.html": [
