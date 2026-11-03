@@ -283,9 +283,12 @@ impl<'dom> LayoutDom<'dom, Node> {
     pub(crate) fn text_node_paints_caret(&self) -> bool {
         self.parent_node_ref()
             .is_some_and(|parent| parent.is_text_container_of_single_line_input()) ||
-            self.owner_doc_for_layout()
-                .visible_selection_for_layout()
-                .is_some_and(|selection| selection.paints_caret_for_layout())
+            (self
+                .unsafe_get()
+                .get_flag(NodeFlags::OVERLAPS_DOCUMENT_SELECTION) &&
+                self.owner_doc_for_layout()
+                    .visible_selection_for_layout()
+                    .is_some_and(|selection| selection.paints_caret_for_layout()))
     }
 
     pub(crate) fn text_node_needs_caret_placeholder(&self) -> bool {
