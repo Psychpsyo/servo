@@ -35,9 +35,7 @@ use crate::dom::bindings::str::DOMString;
 use crate::dom::comparator::compare_dom_positions;
 use crate::dom::document::Document;
 use crate::dom::eventtarget::EventTarget;
-use crate::dom::iterators::{
-    PrePostIteration, ShadowIncluding, UnrootedFollowingFlatTreeNodesTraversal,
-};
+use crate::dom::iterators::{PrePostIteration, UnrootedFollowingFlatTreeNodesTraversal};
 use crate::dom::node::{Node, NodeTraits};
 use crate::dom::range::Range;
 use crate::dom::selection_range::{RootedSelectionBoundary, SelectionBoundary, SelectionRange};
@@ -344,14 +342,12 @@ impl Selection {
             return;
         }
 
-        if let Some(range) = self.range.borrow().as_ref() {
-            let new_paints_caret = self.should_paint_caret(range, no_gc);
-            if new_paints_caret != self.paints_caret.get() {
-                self.paints_caret.set(new_paints_caret);
-            }
-        } else {
-            self.paints_caret.set(false);
-        }
+        self.paints_caret.set(
+            self.range
+                .borrow()
+                .as_ref()
+                .is_some_and(|range| self.should_paint_caret(range, no_gc)),
+        );
 
         let previously_flagged_nodes = self
             .iter_nodes_with_overlaps_document_selection_flag(no_gc)
@@ -379,11 +375,15 @@ impl Selection {
         // This is the cases where, if `selection_for_text_node` returns a selection,
         // it is a document selection.
         servo_config::pref!(dom_exec_command_enabled) &&
-            range
-                .end
-                .container
-                .common_ancestor(&range.start.container, ShadowIncluding::No)
-                .is_some_and(|ancestor| ancestor.editing_host_of().is_some())
+            range.collapsed() &&
+            self.document
+                .focus_handler()
+                .focused_area()
+                .element()
+                .is_some_and(|focused_element| {
+                    Some(focused_element.upcast::<Node>()) ==
+                        range.end.container.editing_host_of().as_deref()
+                })
     }
 
     /// <https://w3c.github.io/selection-api/#dfn-schedule-a-selectionchange-event>
